@@ -35,7 +35,7 @@ class Icon():
         if self.metadata.get("states"):
             for name in self.metadata.get("states"):
                 state = IconState(
-                    row = self.metadata["states"][name].get("start", 0),
+                    row = self.metadata["states"][name].get("row", 0),
                     length = self.metadata["states"][name].get("length", 1),
                     wait = self.metadata["states"][name].get("wait", 1),
                     loop = self.metadata["states"][name].get("loop", True),
@@ -53,13 +53,16 @@ class Icon():
     def get_state(self):
         return self._state
 
-    def set_state(self, icon_state: str):
+    def set_state(self, icon_state: str, restart=True):
         if icon_state not in self.states and icon_state != None:
             raise ValueError(f"nonexistent icon state {icon_state}")
     
-        self._state_name = icon_state
-        self._state = self.states[icon_state]
-        self._state_just_changed = True
+        if self._state_name != icon_state:
+            self._state_name = icon_state
+            self._state = self.states[icon_state]
+
+            if restart:
+                self._state_just_changed = True
 
     def get_surface(self, frame):
         if not self._converted:
