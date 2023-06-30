@@ -1,22 +1,23 @@
-from pygame.math import Vector2
+import pygame as pg
 
 from mdln.const import *
 from mdln.icon import Icon
 
-def Entity():
-    position: Vector2 = None
+class Entity():
+    position: pg.math.Vector2 = None
     layer = LAYER_DEFAULT
     scene = None
     icon: Icon = None
 
     def __init__(self):
-        pass
+        self.position = pg.math.Vector2(0, 0)
 
     def tick(self):
         pass
 
     def draw(self):
-        pass
+        if self.icon is not None:
+            self.scene.game.screen.blit(self.icon.get_surface(self.scene.game.frame), self.position)
 
     def event(self, event):
         pass

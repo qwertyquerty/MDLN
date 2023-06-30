@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 import sys
 
 LAYER_BOTTOM = -sys.maxsize - 1
@@ -28,3 +29,11 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 COLOR_BACKGROUND_DEFAULT = GRAY
+
+RESOURCE_PATH = os.path.join(".", "resource")
+DATA_RESOURCE_PATH = os.path.join(RESOURCE_PATH, "data")
+ICON_RESOURCE_PATH = os.path.join(RESOURCE_PATH, "icon")
+SOUND_RESOURCE_PATH = os.path.join(RESOURCE_PATH, "sound")
+
+
+ICON_SIZE_DEFAULT = (16, 16)

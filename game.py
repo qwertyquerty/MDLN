@@ -26,6 +26,8 @@ class Game():
 
     _scene: Scene = None
 
+    frame = 0
+
     def __init__(self,
         screen_size = SCREEN_SIZE_DEFAULT,
         fps: int = FPS_DEFAULT,
@@ -54,6 +56,8 @@ class Game():
         self.icon = icon
         pg.display.set_icon(icon)
 
+        self.frame = 0
+
         self.running = False
 
     def start(self):
@@ -64,7 +68,10 @@ class Game():
                 self._event(event)
             self._tick()
             self._draw()
+            
             self.clock.tick(self.fps)
+
+            self.frame += 1
 
     def _event(self, event):
         self.event(event)
@@ -112,6 +119,9 @@ class Game():
     
     def get_scene(self):
         return self._scene
+
+    def get_fps(self):
+        return self.clock.get_fps()
 
     def event(self, event):
         pass

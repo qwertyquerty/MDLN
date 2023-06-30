@@ -36,5 +36,5 @@ class Scene():
     def draw(self):
         pass
 
-    def event(self):
+    def event(self, event):
         pass
