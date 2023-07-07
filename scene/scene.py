@@ -1,43 +1,40 @@
 from mdln.const import *
 from mdln.entity import Entity
+from mdln.stage import Stage
 
 class Scene():
-    entities: list[Entity] = None
+    stages: list[Stage] = None
     game = None
 
     def __init__(self):
-        self.entities = []
+        self.stages = []
 
     def _tick(self):
         self.tick()
 
-        for entity in self.entities:
-            entity.tick()
+        for stage in self.stages:
+            stage._tick()
 
-    def _draw(self):
-        self.draw()
+    def _draw(self, screen):
+        self.draw(screen)
 
-        for entity in sorted(self.entities, key=lambda e: e.layer):
-            if entity.visible:
-                surf = entity.draw()
-
-                if surf is not None:
-                    self.game.screen.blit(surf, entity.position)
+        for stage in sorted(self.stages, key=lambda s: s.layer):
+            stage._draw(screen)
 
     def _event(self, event):
         self.event(event)
 
-        for entity in self.entities:
-            entity.event(event)
+        for stage in self.stages:
+            stage._event(event)
 
-    def add_entity(self, entity):
-        self.entities.append(entity)
-        entity.scene = self
+    def add_stage(self, stage):
+        self.stages.append(stage)
+        stage.scene = self
 
     def tick(self):
         pass
 
-    def draw(self):
+    def draw(self, screen):
         pass
 
     def event(self, event):

@@ -6,7 +6,7 @@ from mdln.icon import Icon
 class Entity():
     rect: pg.Rect = None
     layer = LAYER_DEFAULT
-    scene = None
+    stage = None
     icon: Icon = None
     visible: bool = False
 
@@ -21,7 +21,7 @@ class Entity():
 
     def draw(self) -> pg.Surface:
         if self.icon is not None:
-            return self.icon.get_surface(self.scene.game.frame)
+            return self.icon.get_surface(self.stage.scene.game.frame)
         
         return None
 

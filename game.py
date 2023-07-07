@@ -95,12 +95,12 @@ class Game():
             self._scene._tick()
 
     def _draw(self):
-        self.draw()
+        self.draw(self.screen)
 
         self.screen.fill(self.background_color)
 
         if self._scene is not None:
-            self._scene._draw()
+            self._scene._draw(self.screen)
 
         if self.pixel_scaling != 1:
             pg.transform.scale_by(self.screen, self.pixel_scaling, self.window)
@@ -134,6 +134,6 @@ class Game():
     def tick(self):
         pass
 
-    def draw(self):
+    def draw(self, screen):
         pass
 
