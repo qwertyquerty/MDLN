@@ -8,6 +8,7 @@ class Entity():
     layer = LAYER_DEFAULT
     scene = None
     icon: Icon = None
+    visible: bool = False
 
     def __init__(self):
         self.position = pg.math.Vector2(0, 0)
@@ -15,9 +16,11 @@ class Entity():
     def tick(self):
         pass
 
-    def draw(self):
+    def draw(self) -> pg.Surface:
         if self.icon is not None:
-            self.scene.game.screen.blit(self.icon.get_surface(self.scene.game.frame), self.position)
+            return self.icon.get_surface(self.scene.game.frame)
+        
+        return None
 
     def event(self, event):
         pass

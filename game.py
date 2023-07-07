@@ -35,7 +35,8 @@ class Game():
         title: str = TITLE_DEFAULT,
         icon: pg.Surface = ICON_DEFAULT,
         display_flags: int = DISPLAY_FLAGS_DEFAULT,
-        background_color: tuple = COLOR_BACKGROUND_DEFAULT
+        background_color: tuple = COLOR_BACKGROUND_DEFAULT,
+        window: pg.Surface = None
     ):
         self.screen_size = screen_size
         self.fps = fps
@@ -47,7 +48,11 @@ class Game():
 
         self.screen = pg.Surface(screen_size)
 
-        self.window = pg.display.set_mode(((self.screen_size[0] * self.pixel_scaling), (self.screen_size[1] * self.pixel_scaling)), self.display_flags)
+        if window:
+            self.window = window
+        else:
+            self.window = pg.display.set_mode(((self.screen_size[0] * self.pixel_scaling), (self.screen_size[1] * self.pixel_scaling)), self.display_flags)
+    
         self.clock = pg.time.Clock()
 
         self.title = title

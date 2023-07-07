@@ -18,7 +18,11 @@ class Scene():
         self.draw()
 
         for entity in sorted(self.entities, key=lambda e: e.layer):
-            entity.draw()
+            if entity.visible:
+                surf = entity.draw()
+
+                if surf is not None:
+                    self.game.screen.blit(surf, entity.position)
 
     def _event(self, event):
         self.event(event)
