@@ -36,7 +36,7 @@ class Scene():
 
     def tick(self):
         pass
-    
+
     def draw(self):
         pass
 
