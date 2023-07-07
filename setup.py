@@ -19,5 +19,9 @@ setuptools.setup(
     python_requires=">=3.6",
     project_urls={
         "Documentation": "https://github.com/qwertyquerty/MDLN",
-    }
+    },
+    install_requires = [
+        "pygame>=2.2.0, <3",
+        "pyyaml==6.0"
+    ]
 )
