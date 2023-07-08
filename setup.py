@@ -9,7 +9,7 @@ about = {}
 with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "mdln", "__about__.py"), "r") as f:
     exec(f.read(), about)
 
-with open("readme.md", "r") as f:
+with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "README.md"), "r") as f:
     readme = f.read()
 
 setuptools.setup(
