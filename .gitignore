@@ -1,3 +1,6 @@
 __pycache__
+build/
+dist/
+resource/
 example.py
-resource
+*.egg-info
