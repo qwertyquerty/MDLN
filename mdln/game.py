@@ -2,6 +2,7 @@ import pygame as pg
 
 from mdln.const import *
 from mdln.scene import Scene
+from mdln.util import load_all_entities_from_path
 
 class Game():
     clock: pg.time.Clock = None
@@ -36,7 +37,8 @@ class Game():
         icon: pg.Surface = ICON_DEFAULT,
         display_flags: int = DISPLAY_FLAGS_DEFAULT,
         background_color: tuple = COLOR_BACKGROUND_DEFAULT,
-        window: pg.Surface = None
+        window: pg.Surface = None,
+        entity_path: str = None
     ):
         self.screen_size = screen_size
         self.fps = fps
@@ -64,6 +66,9 @@ class Game():
         self.frame = 0
 
         self.running = False
+
+        if entity_path != None:
+            load_all_entities_from_path(entity_path)
 
     def start(self):
         self.running = True
