@@ -1,7 +1,9 @@
 import pygame as pg
+import inspect
 
 from mdln.const import *
 from mdln.icon import Icon
+from mdln.registry import ENTITY_REGISTRY
 
 class Entity():
     rect: pg.Rect = None
@@ -14,6 +16,17 @@ class Entity():
     def __init__(self, rect=None, components=None):
         self.components = components or []
         self.rect = rect or pg.Rect(0, 0, RECT_SIZE_DEFAULT[0], RECT_SIZE_DEFAULT[1])
+    
+    def __init_subclass__(cls) -> None:
+        """
+        Register all known subtypes in the entity registry under their entity path
+        """
+
+        tree = list(inspect.getmro(cls))
+        tree.remove(Entity)
+        tree.remove(object)
+        path = '.'.join([o.__name__ for o in tree[::-1]])        
+        ENTITY_REGISTRY[path] = cls
 
     def tick(self):
         for component in self._component_registry.items():

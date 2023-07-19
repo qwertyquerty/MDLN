@@ -4,7 +4,7 @@ import pygame as pg
 from mdln.const import *
 from mdln.resource import load_icon, try_convert_surface, RESOURCE_CACHE_ICON
 
-IconState = namedtuple("IconState", "row length wait loop always_reset")
+IconState = namedtuple("IconState", "row col length wait loop always_reset")
 
 class Icon():
     sprite_map: pg.Surface = None
@@ -36,6 +36,7 @@ class Icon():
             for name in self.metadata.get("states"):
                 state = IconState(
                     row = self.metadata["states"][name].get("row", 0),
+                    col = self.metadata["states"][name].get("col", 0),
                     length = self.metadata["states"][name].get("length", 1),
                     wait = self.metadata["states"][name].get("wait", 1),
                     loop = self.metadata["states"][name].get("loop", True),
@@ -83,9 +84,9 @@ class Icon():
             row = self._state.row
 
             if self._state.loop:
-                col = ((frame - self._animation_start_frame) // self._state.wait) % self._state.length
+                col = self._state.col + ((frame - self._animation_start_frame) // self._state.wait) % self._state.length
             else:
-                col = min((frame - self._animation_start_frame) // self._state.wait, self._state.length - 1)
+                col = self._state.col + min((frame - self._animation_start_frame) // self._state.wait, self._state.length - 1)
 
         else:
             row = 0
