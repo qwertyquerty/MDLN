@@ -26,7 +26,7 @@ class Entity():
         tree.remove(Entity)
         tree.remove(object)
         path = '.'.join([o.__name__ for o in tree[::-1]])        
-        ENTITY_REGISTRY[path] = cls
+        ENTITY_REGISTRY[path.lower()] = cls
 
     def tick(self):
         for component in self._component_registry.items():
