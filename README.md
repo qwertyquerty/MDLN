@@ -2,7 +2,7 @@
 
 > Madeline Doesn't Like Naming
 
-A lightweight, high performance, and object-focused 2D game framework in Python
+A lightweight, high performance 2D game framework in Python where ECS meets OOP
 
 ### General Structure Plan
 
@@ -12,15 +12,16 @@ A lightweight, high performance, and object-focused 2D game framework in Python
     - [x] Clock
     - [x] Scene
         - [x] Stages [ ... ]
+            - [ ] Systems [ ... ]
             - [x] Entites [ ... ]
                 - [x] Icon
                     - [x] sprite map
                     - [x] icon states
                 - [x] Layer
                 - [x] Rect
-                - [ ] Components [ ... ]
+                - [x] Components [ ... ]
         - [ ] Mixer
-    - [ ] Systems [ ... ]
+    - [ ] Aux Threads [ ... ]
     - [x] Event Handlers [ ... ]
 
 *Documentation coming soon..*
