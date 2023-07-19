@@ -1,9 +1,11 @@
 __pycache__
 build/
 dist/
-resource/
+/resource/
+/catharsis/
 example*.py
 *.egg-info
 venv
 *.whl
 /__init__.py
+catharsis.py
