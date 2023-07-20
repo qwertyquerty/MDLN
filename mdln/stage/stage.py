@@ -11,10 +11,9 @@ class Stage():
 
     def _tick(self):
         self.tick()
-
-        for entity in self.entities:
-            entity.tick()
-
+        # somehow faster than a for loop
+        list(map(lambda e: e.tick(), (e for e in self.entities if e.ticks)))
+                
     def _draw(self, screen):
         self.draw(screen)
 
