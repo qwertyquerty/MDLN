@@ -38,7 +38,8 @@ class Game():
         display_flags: int = DISPLAY_FLAGS_DEFAULT,
         background_color: tuple = COLOR_BACKGROUND_DEFAULT,
         window: pg.Surface = None,
-        entity_path: str = None
+        entity_path: str = None,
+        tick_interval: int = 1
     ):
         self.screen_size = screen_size
         self.fps = fps
@@ -67,6 +68,8 @@ class Game():
 
         self.running = False
 
+        self.tick_interval = tick_interval
+
         if entity_path != None:
             load_all_entities_from_path(entity_path)
 
@@ -76,7 +79,10 @@ class Game():
         while self.running:
             for event in pg.event.get():
                 self._event(event)
-            self._tick()
+
+            if self.frame % self.tick_interval == 0:
+                self._tick()
+            
             self._draw()
             
             self.clock.tick(self.fps)
