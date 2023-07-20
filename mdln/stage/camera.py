@@ -18,9 +18,18 @@ class CameraStage(Stage):
     def _draw(self, screen):
         self.draw(screen)
 
+        display_rect = self.scene.game.display.get_rect()
+
         for entity in sorted(self.entities, key=lambda e: e.layer):
             if entity.visible:
-                surf = entity.draw()
+                image_rect = entity.draw()
 
-                if surf is not None:
-                    screen.blit(surf, entity.rect.topleft - self.camera_pos + self.scene.game.screen.get_rect().center)
+                scale = self.scene.game.pixel_scaling
+                dest = pg.Rect(
+                    (entity.rect.left - self.camera_pos.x) * scale + display_rect.centerx,
+                    (entity.rect.top - self.camera_pos.y) * scale + display_rect.centery,
+                    image_rect.width * scale,
+                    image_rect.height * scale
+                )
+                
+                entity.icon.texture.draw(srcrect=image_rect, dstrect=dest)

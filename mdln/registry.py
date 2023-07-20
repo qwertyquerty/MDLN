@@ -6,3 +6,5 @@ def get_entity_type(type_path):
 
     if t is None:
         raise Exception(f"Invalid type path: {type_path}")
+
+    return t

@@ -1,10 +1,13 @@
 from collections import namedtuple
 import pygame as pg
+import pygame._sdl2
 
 from mdln.const import *
 from mdln.resource import load_icon, try_convert_surface, RESOURCE_CACHE_ICON
 
 IconState = namedtuple("IconState", "row col length wait loop always_reset")
+
+texture_cache = None
 
 class Icon():
     sprite_map: pg.Surface = None
@@ -25,6 +28,8 @@ class Icon():
         self.resource = resource
 
         self.sprite_map, self.metadata, self._converted = load_icon(self.resource)
+
+        self.texture = None
 
         self.size = pg.math.Vector2(*(self.metadata.get("size") or ICON_SIZE_DEFAULT))
 
@@ -48,9 +53,6 @@ class Icon():
         
         self.set_state(icon_state)
 
-    def get_subsurface_at(self, row, column):
-        return self.sprite_map.subsurface(pg.Rect(self.size.x*column, self.size.y*row, self.size.x, self.size.y))
-
     def get_state(self):
         return self._state
 
@@ -65,16 +67,10 @@ class Icon():
             if restart:
                 self._state_just_changed = True
 
-    def get_surface(self, frame):
-        if not self._converted:
-            new_surface = try_convert_surface(self.sprite_map, self.metadata)
+    def get_image(self, frame, screen):
+        if not self.texture:
+            self.texture = pygame._sdl2.video.Texture.from_surface(screen, self.sprite_map)
             
-            if new_surface:
-                self.sprite_map = new_surface
-                # TODO: still named tuples and maybe move this all into a specific try convert resource method
-                RESOURCE_CACHE_ICON[self.resource][2] = True
-                self._converted = True
-
         if self._state_just_changed:
             self._state_just_changed = False
             if self._state.always_reset:
@@ -92,4 +88,4 @@ class Icon():
             row = 0
             col = 0
     
-        return self.get_subsurface_at(row, col)
+        return pg.Rect(self.size.x*col, self.size.y*row, self.size.x, self.size.y)

@@ -1,4 +1,5 @@
 import pygame as pg
+import pygame._sdl2
 
 from mdln.const import *
 from mdln.scene import Scene
@@ -48,13 +49,10 @@ class Game():
 
         self.event_handlers = {}
 
-        self.screen = pg.Surface(screen_size)
+        self.display = pg.display.set_mode(((self.screen_size[0] * self.pixel_scaling), (self.screen_size[1] * self.pixel_scaling)), self.display_flags)
+        self.window = pygame._sdl2.video.Window.from_display_module()
+        self.screen = pygame._sdl2.video.Renderer(self.window, accelerated=1, index=1)
 
-        if window:
-            self.window = window
-        else:
-            self.window = pg.display.set_mode(((self.screen_size[0] * self.pixel_scaling), (self.screen_size[1] * self.pixel_scaling)), self.display_flags)
-    
         self.clock = pg.time.Clock()
 
         self.title = title
@@ -100,19 +98,15 @@ class Game():
             self._scene._tick()
 
     def _draw(self):
-        self.draw(self.screen)
+        self.screen.draw_color = self.background_color
+        self.screen.fill_rect(self.display.get_rect())
 
-        self.screen.fill(self.background_color)
+        self.draw(self.screen)
 
         if self._scene is not None:
             self._scene._draw(self.screen)
 
-        if self.pixel_scaling != 1:
-            pg.transform.scale_by(self.screen, self.pixel_scaling, self.window)
-        else:
-            self.window.blit(self.screen, (0,0))
-
-        pg.display.flip()
+        self.screen.present()
 
     def handler(self, event_type):
         def decorator(handler):

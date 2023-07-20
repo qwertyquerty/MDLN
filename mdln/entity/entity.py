@@ -34,7 +34,7 @@ class Entity():
 
     def draw(self) -> pg.Surface:
         if self.icon is not None:
-            return self.icon.get_surface(self.stage.scene.game.frame)
+            return self.icon.get_image(self.stage.scene.game.frame, self.stage.scene.game.screen)
 
         return None
 
