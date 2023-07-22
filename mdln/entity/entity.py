@@ -11,6 +11,7 @@ class Entity():
     stage = None
     icon: Icon = None
     visible: bool = False
+    ticks: bool = True
     _component_registry = {}
 
     def __init__(self, rect=None, components=None):
