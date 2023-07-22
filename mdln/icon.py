@@ -68,7 +68,7 @@ class Icon():
                 self._state_just_changed = True
 
     def get_image(self, frame, screen):
-        if not self.texture:
+        if self.texture is None:
             self.texture = pygame._sdl2.video.Texture.from_surface(screen, self.sprite_map)
             
         if self._state_just_changed:
