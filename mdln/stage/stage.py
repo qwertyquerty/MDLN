@@ -13,7 +13,7 @@ class Stage():
         self.tick()
         
         for entity in self.entities:
-            if entity.ticks():
+            if entity.ticks:
                 entity.tick()
                 
     def _draw(self, screen):
