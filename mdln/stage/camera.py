@@ -21,7 +21,9 @@ class CameraStage(Stage):
         screen_center = screen.get_rect().center
         screen_size = screen.get_size()
 
-        for entity in sorted((e for e in self.entities if e.visible), key=lambda e: e.layer):
+        self.entities.sort(key=lambda e: e.layer)
+
+        for entity in self.entities:
             surf = entity.draw()
 
             if surf is not None:

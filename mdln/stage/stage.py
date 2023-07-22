@@ -19,7 +19,9 @@ class Stage():
     def _draw(self, screen):
         self.draw(screen)
 
-        for entity in sorted(self.entities, key=lambda e: e.layer):
+        self.entities.sort(key=lambda e: e.layer)
+
+        for entity in self.entities:
             if entity.visible:
                 surf = entity.draw()
 
