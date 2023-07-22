@@ -20,7 +20,9 @@ class CameraStage(Stage):
 
         display_rect = self.scene.game.display.get_rect()
 
-        for entity in sorted(self.entities, key=lambda e: e.layer):
+        self.entities.sort(key=lambda e: e.layer)
+
+        for entity in self.entities:
             if entity.visible:
                 image_rect = entity.draw()
 
