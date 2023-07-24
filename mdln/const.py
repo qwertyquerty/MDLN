@@ -19,16 +19,7 @@ ICON_DEFAULT = pg.Surface((0,0))
 
 DISPLAY_FLAGS_DEFAULT = pg.DOUBLEBUF | pg.HWACCEL
 
-
-BLACK = (0, 0, 0)
-GRAY = (128, 128, 128)
-WHITE = (255, 255, 255)
-
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-COLOR_BACKGROUND_DEFAULT = GRAY
+COLOR_BACKGROUND_DEFAULT = pg.Color(128, 128, 128, 255)
 
 RESOURCE_PATH = os.path.join(".", "resource")
 DATA_RESOURCE_PATH = os.path.join(RESOURCE_PATH, "data")
