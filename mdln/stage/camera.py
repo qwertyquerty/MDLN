@@ -7,17 +7,11 @@ class CameraStage(Stage):
     camera_pos: pg.math.Vector2 = pg.math.Vector2(0, 0)
     camera_target: Entity = None
 
-    def _tick(self):
-        _ = super()._tick()
-    
+    def tick(self):
         if self.camera_target is not None:
             self.camera_pos.update(self.camera_target.rect.center)
 
-        return _
-
-    def _draw(self, screen):
-        self.draw(screen)
-
+    def draw_entities(self, screen):
         display_rect = self.scene.game.display.get_rect()
 
         self.entities.sort(key=lambda e: e.layer)

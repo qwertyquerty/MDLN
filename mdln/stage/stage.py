@@ -18,7 +18,10 @@ class Stage():
 
     def _draw(self, screen):
         self.draw(screen)
+        self.draw_entities(screen)
+        self.post_draw(screen)
 
+    def draw_entities(self, screen):
         self.entities.sort(key=lambda e: e.layer)
 
         for entity in self.entities:
@@ -36,7 +39,7 @@ class Stage():
     
     def _init(self):
         self.init()
-        
+
         for entity in self.entities:
             entity.init()
 
@@ -51,6 +54,9 @@ class Stage():
         pass
 
     def draw(self, screen):
+        pass
+    
+    def post_draw(self, screen):
         pass
 
     def event(self, event):
