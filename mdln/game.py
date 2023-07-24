@@ -69,8 +69,8 @@ class Game():
             load_all_entities_from_path(entity_path)
 
     def start(self):
-        self.init()
-        
+        self._init()
+
         self.running = True
 
         while self.running:
@@ -109,6 +109,12 @@ class Game():
             self._scene._draw(self.screen)
 
         self.screen.present()
+    
+    def _init(self):
+        self.init()
+
+        if self._scene:
+            self._scene._init()
 
     def handler(self, event_type):
         def decorator(handler):

@@ -33,11 +33,19 @@ class Stage():
 
         for entity in self.entities:
             entity.event(event)
+    
+    def _init(self):
+        self.init()
+        
+        for entity in self.entities:
+            entity.init()
 
     def add_entity(self, entity):
         self.entities.append(entity)
         entity.stage = self
-        entity.init()
+
+        if self.scene and self.scene.game and self.scene.game.running:
+            entity.init()
 
     def tick(self):
         pass

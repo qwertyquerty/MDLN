@@ -26,11 +26,19 @@ class Scene():
 
         for stage in self.stages:
             stage._event(event)
+    
+    def _init(self):
+        self.init()
+        
+        for stage in self.stages:
+            stage._init()
 
     def add_stage(self, stage):
         self.stages.append(stage)
         stage.scene = self
-        stage.init()
+
+        if self.game and self.game.running:
+            stage.init()
 
     def tick(self):
         pass
