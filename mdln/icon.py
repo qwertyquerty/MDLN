@@ -3,7 +3,7 @@ import pygame as pg
 import pygame._sdl2
 
 from mdln.const import *
-from mdln.resource import load_icon, try_convert_surface, RESOURCE_CACHE_ICON
+from mdln.resource import load_icon, load_texture
 
 IconState = namedtuple("IconState", "row col length wait loop always_reset")
 
@@ -22,12 +22,10 @@ class Icon():
     _animation_start_frame = 0
     _state_just_changed = False
 
-    _converted = False
-
     def __init__(self, resource, icon_state=None):
         self.resource = resource
 
-        self.sprite_map, self.metadata, self._converted = load_icon(self.resource)
+        self.sprite_map, self.metadata = load_icon(self.resource)
 
         self.texture = None
 
@@ -69,7 +67,7 @@ class Icon():
 
     def get_image(self, frame, screen):
         if self.texture is None:
-            self.texture = pygame._sdl2.video.Texture.from_surface(screen, self.sprite_map)
+            self.texture = load_texture(self.resource, screen)
             
         if self._state_just_changed:
             self._state_just_changed = False
