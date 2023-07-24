@@ -37,6 +37,7 @@ class Stage():
     def add_entity(self, entity):
         self.entities.append(entity)
         entity.stage = self
+        entity.init()
 
     def tick(self):
         pass
@@ -45,4 +46,7 @@ class Stage():
         pass
 
     def event(self, event):
+        pass
+
+    def init(self):
         pass

@@ -42,6 +42,9 @@ class Entity():
 
     def event(self, event):
         pass
+    
+    def init(self):
+        pass
 
     def add_component(self, component):
         existing = self.get_component(type(component))

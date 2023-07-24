@@ -74,6 +74,8 @@ class Game():
             load_all_entities_from_path(entity_path)
 
     def start(self):
+        self.init()
+        
         self.running = True
 
         while self.running:
@@ -132,6 +134,7 @@ class Game():
     def set_scene(self, scene: Scene):
         self._scene = scene
         self._scene.game = self
+        scene.init()
     
     def get_scene(self):
         return self._scene
@@ -148,3 +151,5 @@ class Game():
     def draw(self, screen):
         pass
 
+    def init(self):
+        pass

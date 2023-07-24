@@ -30,6 +30,7 @@ class Scene():
     def add_stage(self, stage):
         self.stages.append(stage)
         stage.scene = self
+        stage.init()
 
     def tick(self):
         pass
@@ -38,4 +39,7 @@ class Scene():
         pass
 
     def event(self, event):
+        pass
+
+    def init(self):
         pass
