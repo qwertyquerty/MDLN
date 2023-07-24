@@ -7,9 +7,7 @@ class CameraStage(Stage):
     camera_pos: pg.math.Vector2 = pg.math.Vector2(0, 0)
     camera_target: Entity = None
 
-    def _tick(self):
-        _ = super()._tick()
-    
+    def tick(self):
         if self.camera_target is not None:
             self.camera_pos.update(self.camera_target.rect.center)
 
@@ -18,6 +16,7 @@ class CameraStage(Stage):
     def _draw(self, screen):
         self.draw(screen)
 
+    def draw_entities(self, screen):
         screen_center = screen.get_rect().center
         screen_size = screen.get_size()
 

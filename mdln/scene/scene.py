@@ -20,6 +20,8 @@ class Scene():
 
         for stage in sorted(self.stages, key=lambda s: s.layer):
             stage._draw(screen)
+        
+        self.post_draw(screen)
 
     def _event(self, event):
         self.event(event)
@@ -29,7 +31,7 @@ class Scene():
     
     def _init(self):
         self.init()
-        
+
         for stage in self.stages:
             stage._init()
 
@@ -44,6 +46,9 @@ class Scene():
         pass
 
     def draw(self, screen):
+        pass
+    
+    def post_draw(self, screen):
         pass
 
     def event(self, event):
