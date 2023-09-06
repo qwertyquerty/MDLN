@@ -10,12 +10,7 @@ class CameraStage(Stage):
     def tick(self):
         if self.camera_target is not None:
             self.camera_pos.update(self.camera_target.rect.center)
-
-        return _
-
-    def _draw(self, screen):
-        self.draw(screen)
-
+    
     def draw_entities(self, screen):
         screen_center = screen.get_rect().center
         screen_size = screen.get_size()
