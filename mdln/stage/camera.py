@@ -1,10 +1,9 @@
-import pygame as pg
-
 from mdln.entity import Entity
 from mdln.stage import Stage
+from mdln.util import Vec2
 
 class CameraStage(Stage):
-    camera_pos: pg.math.Vector2 = pg.math.Vector2(0, 0)
+    camera_pos: Vec2 = Vec2(0, 0)
     camera_target: Entity = None
 
     def tick(self):

@@ -3,13 +3,14 @@ import pygame as pg
 
 from mdln.const import *
 from mdln.resource import load_icon, try_convert_surface, RESOURCE_CACHE_ICON
+from mdln.util import Vec2
 
 IconState = namedtuple("IconState", "row col length wait loop always_reset")
 
 class Icon():
     sprite_map: pg.Surface = None
     metadata: dict = {}
-    size: pg.math.Vector2 = None
+    size: Vec2 = None
     states: dict = {}
 
     has_alpha = True
@@ -26,7 +27,7 @@ class Icon():
 
         self.sprite_map, self.metadata, self._converted = load_icon(self.resource)
 
-        self.size = pg.math.Vector2(*(self.metadata.get("size") or ICON_SIZE_DEFAULT))
+        self.size = Vec2(*(self.metadata.get("size") or ICON_SIZE_DEFAULT))
 
         self.has_alpha = self.metadata.get("has_alpha", True)
 
