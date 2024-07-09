@@ -31,12 +31,6 @@ class Stage():
                 if surf is not None:
                     screen.blit(surf, entity.rect.topleft)
 
-    def _event(self, event):
-        self.event(event)
-
-        for entity in self.entities:
-            entity.event(event)
-    
     def _init(self):
         self.init()
 
@@ -57,9 +51,6 @@ class Stage():
         pass
     
     def post_draw(self, screen):
-        pass
-
-    def event(self, event):
         pass
 
     def init(self):

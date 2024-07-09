@@ -6,7 +6,7 @@ LAYER_BOTTOM = -sys.maxsize - 1
 LAYER_DEFAULT = 0
 LAYER_TOP = sys.maxsize
 
-
+FPS_UNLIMITED = -1
 FPS_DEFAULT = 60
 
 PIXEL_SCALE_DEFAULT = 1

@@ -40,9 +40,6 @@ class Entity():
 
         return None
 
-    def event(self, event):
-        pass
-    
     def init(self):
         pass
 

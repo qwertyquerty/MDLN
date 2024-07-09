@@ -23,12 +23,6 @@ class Scene():
         
         self.post_draw(screen)
 
-    def _event(self, event):
-        self.event(event)
-
-        for stage in self.stages:
-            stage._event(event)
-    
     def _init(self):
         self.init()
 
@@ -49,9 +43,6 @@ class Scene():
         pass
     
     def post_draw(self, screen):
-        pass
-
-    def event(self, event):
         pass
 
     def init(self):

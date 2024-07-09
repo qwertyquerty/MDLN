@@ -1,6 +1,7 @@
 import pygame as pg
 
 from mdln.const import *
+from mdln.glob import event_handlers
 from mdln.scene import Scene
 from mdln.util import load_all_entities_from_path
 
@@ -92,14 +93,9 @@ class Game():
             self.frame += 1
 
     def _event(self, event):
-        self.event(event)
-
-        if event.type in self.event_handlers:
-            for handler in self.event_handlers[event.type]:
+        if event.type in event_handlers:
+            for handler in event_handlers[event.type]:
                 handler(event)
-        
-        if self._scene is not None:
-            self._scene._event(event)
 
     def _tick(self):
         self.tick()
@@ -128,15 +124,6 @@ class Game():
         if self._scene:
             self._scene._init()
 
-    def handler(self, event_type):
-        def decorator(handler):
-            if event_type in self.event_handlers:
-                self.event_handlers[event_type].append(handler)
-            else:
-                self.event_handlers[event_type] = [handler]
-
-        return decorator
-
     def set_scene(self, scene: Scene):
         self._scene = scene
         self._scene.game = self
@@ -147,9 +134,6 @@ class Game():
 
     def get_fps(self):
         return self.clock.get_fps()
-
-    def event(self, event):
-        pass
 
     def tick(self):
         pass
