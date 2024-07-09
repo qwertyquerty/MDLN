@@ -2,6 +2,8 @@ import pygame as pg
 import os
 import sys
 
+from mdln.geometry import Vec2
+
 LAYER_BOTTOM = -sys.maxsize - 1
 LAYER_DEFAULT = 0
 LAYER_TOP = sys.maxsize
@@ -11,7 +13,7 @@ FPS_DEFAULT = 60
 
 PIXEL_SCALE_DEFAULT = 1
 
-SCREEN_SIZE_DEFAULT = (640, 480)
+SCREEN_SIZE_DEFAULT = Vec2(640, 480)
 
 TITLE_DEFAULT = "MDLN Window"
 

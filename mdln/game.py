@@ -2,6 +2,7 @@ import pygame as pg
 
 from mdln.const import *
 from mdln.glob import event_handlers
+from mdln.geometry import Vec2
 from mdln.scene import Scene
 from mdln.util import load_all_entities_from_path
 
@@ -12,7 +13,7 @@ class Game():
 
     running: bool = False
 
-    screen_size = SCREEN_SIZE_DEFAULT
+    screen_size: Vec2 = SCREEN_SIZE_DEFAULT
 
     pixel_scaling = PIXEL_SCALE_DEFAULT
 
@@ -59,9 +60,8 @@ class Game():
     
         self.clock = pg.time.Clock()
 
-        self.title = title
-        pg.display.set_caption(self.title)
-
+        self.set_title(title)
+        
         self.icon = icon
         pg.display.set_icon(icon)
 
@@ -73,6 +73,10 @@ class Game():
 
         if entity_path != None:
             load_all_entities_from_path(entity_path)
+
+    def set_title(self, title: str):
+        self._title = title
+        pg.display.set_caption(self._title)
 
     def start(self):
         self._init()

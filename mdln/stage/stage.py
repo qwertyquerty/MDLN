@@ -29,7 +29,7 @@ class Stage():
                 surf = entity.draw()
 
                 if surf is not None:
-                    screen.blit(surf, entity.rect.topleft)
+                    screen.blit(surf, entity.rect.topleft())
 
     def _init(self):
         self.init()

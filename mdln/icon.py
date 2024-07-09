@@ -3,7 +3,7 @@ import pygame as pg
 
 from mdln.const import *
 from mdln.resource import load_icon, try_convert_surface, RESOURCE_CACHE_ICON
-from mdln.util import Vec2
+from mdln.geometry import Vec2
 
 IconState = namedtuple("IconState", "row col length wait loop always_reset")
 
@@ -50,7 +50,7 @@ class Icon():
         self.set_state(icon_state)
 
     def get_subsurface_at(self, row, column):
-        return self.sprite_map.subsurface(pg.Rect(self.size.x*column, self.size.y*row, self.size.x, self.size.y))
+        return self.sprite_map.subsurface((self.size.x*column, self.size.y*row, self.size.x, self.size.y))
 
     def get_state(self):
         return self._state
