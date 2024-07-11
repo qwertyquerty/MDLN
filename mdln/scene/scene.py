@@ -3,7 +3,10 @@ from mdln.entity import Entity
 from mdln.stage import Stage
 
 class Scene():
+    initialized: bool = False
+
     stages: list[Stage] = None
+    
     game = None
 
     def __init__(self):
@@ -24,17 +27,20 @@ class Scene():
         self.post_draw(screen)
 
     def _init(self):
-        self.init()
+        if not self.initialized:
+            self.initialized = True
 
-        for stage in self.stages:
-            stage._init()
+            self.init()
+
+            for stage in self.stages:
+                stage._init()
 
     def add_stage(self, stage):
         self.stages.append(stage)
         stage.scene = self
 
-        if self.game and self.game.running:
-            stage.init()
+        if self.game and self.game.running and not stage.initialized:
+            stage._init()
 
     def tick(self):
         pass

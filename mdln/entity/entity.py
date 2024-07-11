@@ -7,17 +7,27 @@ from mdln.icon import Icon
 from mdln.registry import ENTITY_REGISTRY
 
 class Entity():
+    initialized: bool = False
+
     rect: Rect = None
+    
     layer = LAYER_DEFAULT
+    
     stage = None
+    
     icon: Icon = None
+    
     visible: bool = False
-    ticks: bool = True
+    
+    active: bool = True
+    
+    deleted: bool = False
 
-    _component_registry = {}
+    _component_registry: dict = None
 
-    def __init__(self, rect=None, components=None):
-        self.components = components or []
+    def __init__(self, rect=None):
+        self._component_registry = {}
+
         self.rect = rect or Rect(
             Vec2(0, 0),
             Vec2(RECT_SIZE_DEFAULT[0], RECT_SIZE_DEFAULT[1])
@@ -35,12 +45,15 @@ class Entity():
         ENTITY_REGISTRY[path.lower()] = cls
 
     def tick(self):
-        for component in self._component_registry.items():
+        for component in self._component_registry.values():
             component.tick()
 
-    def draw(self) -> pg.Surface:
+    def draw(self, screen: pg.Surface) -> pg.Surface:
         if self.icon is not None:
-            return self.icon.get_surface(self.stage.scene.game.frame)
+            return self.icon.get_surface(self.stage.scene.game.tick)
+
+        for component in self._component_registry.values():
+            component.draw(screen)
 
         return None
 
@@ -55,6 +68,7 @@ class Entity():
 
         self._component_registry[type(component)] = component
         component.attach(self)
+        component.init()
 
     def get_component(self, component_type):
         return self._component_registry.get(component_type)
@@ -66,9 +80,17 @@ class Entity():
         
         return False
     
+    def has_component(self, component_type):
+        return component_type in self._component_registry
+    
     def matches_components(self, component_types):
         for ct in component_types:
             if ct not in self._component_registry:
                 return False
         
         return True
+
+    def qdel(self):
+        if not self.deleted:
+            self.deleted = True
+            self.stage._deletion_queue.append(self)

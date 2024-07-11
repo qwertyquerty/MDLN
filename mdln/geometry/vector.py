@@ -9,6 +9,10 @@ class Vec2():
         self.x = x
         self.y = y
 
+    @classmethod
+    def unit_from_angle(cls, angle: Number) -> Self:
+        return cls(math.cos(angle), math.sin(angle))
+
     def __getitem__(self, key):
         return (self.x, self.y)[key]
     
@@ -151,6 +155,18 @@ class Vec2():
         """arctangent in radians"""
         return math.atan2(self.y, self.x)
     
+    def unit(self) -> float:
+        """get the normalized unit vector"""
+        return self / self.mag()
+
+    def normal(self) -> float:
+        """get the normalized vector perpendicular to this vector"""
+        return self.unit().swap_axes() * Vec2(-1, 1)
+
+    def swap_axes(self) -> Self:
+        """get a new vector with the x and y values swapped"""
+        return Vec2(self.y, self.x)
+
     def copy(self) -> Self:
         """copy of this vector"""
         return Vec2(self.x, self.y)
@@ -174,6 +190,14 @@ class Vec2():
     
     def to_tuple(self) -> tuple:
         return (self.x, self.y)
+    
+    def cart_to_polar(self) -> Self:
+        """cartesian coord to polar coord"""
+        return Vec2(self.mag(), self.angle())
+    
+    def polar_to_cart(self) -> Self:
+        """polar coord to cartesian coord"""
+        return Vec2(math.cos(self.y) * self.x, math.sin(self.y) * self.x)
 
     def __str__(self) -> str:
         return f"<{self.x}, {self.y}>"

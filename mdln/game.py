@@ -7,6 +7,8 @@ from mdln.scene import Scene
 from mdln.util import load_all_entities_from_path
 
 class Game():
+    initialized: bool = False
+
     clock: pg.time.Clock = None
 
     window: pg.Surface = None
@@ -29,7 +31,7 @@ class Game():
 
     _scene: Scene = None
 
-    frame = 0
+    tick = 0
 
     def __init__(self,
         screen_size = SCREEN_SIZE_DEFAULT,
@@ -65,7 +67,7 @@ class Game():
         self.icon = icon
         pg.display.set_icon(icon)
 
-        self.frame = 0
+        self.ticks = 0
 
         self.running = False
 
@@ -87,14 +89,14 @@ class Game():
             for event in pg.event.get():
                 self._event(event)
 
-            if self.frame % self.tick_interval == 0:
+            if self.ticks % self.tick_interval == 0:
                 self._tick()
             
             self._draw()
             
             self.clock.tick(self.fps)
 
-            self.frame += 1
+            self.ticks += 1
 
     def _event(self, event):
         if event.type in event_handlers:
@@ -123,15 +125,20 @@ class Game():
         pg.display.flip()
     
     def _init(self):
-        self.init()
+        if not self.initialized:
+            self.initialized = True
 
-        if self._scene:
-            self._scene._init()
+            self.init()
+
+            if self._scene:
+                self._scene._init()
 
     def set_scene(self, scene: Scene):
         self._scene = scene
         self._scene.game = self
-        scene.init()
+
+        if self.running and not scene.initialized:
+            scene._init()
     
     def get_scene(self):
         return self._scene
@@ -147,3 +154,6 @@ class Game():
 
     def init(self):
         pass
+
+    def get_pixel_mouse_pos(self):
+        return (Vec2(*pg.mouse.get_pos()) / self.pixel_scaling).floored()

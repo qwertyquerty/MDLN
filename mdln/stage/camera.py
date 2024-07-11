@@ -4,6 +4,7 @@ from mdln.geometry import Vec2, Rect
 
 class CameraStage(Stage):
     camera_pos: Vec2 = Vec2(0, 0)
+    
     camera_target: Entity = None
 
     def tick(self):
@@ -16,7 +17,7 @@ class CameraStage(Stage):
         self.entities.sort(key=lambda e: e.layer)
 
         for entity in self.entities:
-            surf = entity.draw()
+            surf = entity.draw(screen)
 
             if surf is not None:
                 surf_rect = Rect(

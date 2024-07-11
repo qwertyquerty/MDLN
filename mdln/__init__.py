@@ -6,3 +6,4 @@ from .event import *
 from .game import *
 from .scene import *
 from .stage import *
+from .system import *
