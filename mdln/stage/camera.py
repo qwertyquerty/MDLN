@@ -3,6 +3,8 @@ from mdln.stage import Stage
 from mdln.geometry import Vec2, Rect
 
 class CameraStage(Stage):
+    # public
+    
     camera_pos: Vec2 = Vec2(0, 0)
     
     camera_target: Entity = None

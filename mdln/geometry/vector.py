@@ -3,9 +3,13 @@ from typing import Iterator, Self, Union
 from numbers import Number
 
 class Vec2():
-    """2 dimensional vector"""
+    # public
+
+    x: Number = 0
+
+    y: Number = 0
     
-    def __init__(self, x, y):
+    def __init__(self, x: Number, y: Number):
         self.x = x
         self.y = y
 

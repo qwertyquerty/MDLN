@@ -6,6 +6,12 @@ import pygame as pg
 from .vector import Vec2
 
 class Rect():
+    # public
+    
+    origin: Vec2 = None
+
+    size: Vec2 = None
+
     def __init__(self, origin: Vec2, size: Vec2):
         self.origin: Vec2 = origin
         self.size: Vec2 = size
@@ -97,19 +103,19 @@ class Rect():
     def perimeter(self):
         return self.size.x * 2 + self.size.y * 2
 
-    def contains_vector(self, other: Vec2, inclusive=True) -> bool:
+    def contains_vector(self, other: Vec2, inclusive: bool = False) -> bool:
         if inclusive:
             return other.x >= self.left() and other.x <= self.right() and other.y >= self.top() and other.y <= self.bottom()
         else:
             return other.x > self.left() and other.x < self.right() and other.y > self.top() and other.y < self.bottom()
 
-    def contains_rect(self, other: Self, inclusive=True) -> bool:
+    def contains_rect(self, other: Self, inclusive: bool = False) -> bool:
         if inclusive:
             return other.left() >= self.left() and other.right() <= self.right() and other.top() >= self.top() and other.bottom() <= self.bottom()
         else:
             return other.left() > self.left() and other.right() < self.right() and other.top() > self.top() and other.bottom() < self.bottom()
 
-    def intersects_rect(self, other: Self, inclusive=True):
+    def intersects_rect(self, other: Self, inclusive: bool = False) -> bool:
         if inclusive:
             return self.left() <= other.right() and self.right() >= other.left() and self.top() <= other.bottom() and self.bottom() >= other.top()
         else:

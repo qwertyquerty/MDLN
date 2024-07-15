@@ -8,21 +8,31 @@ from mdln.geometry import Vec2
 IconState = namedtuple("IconState", "row col length wait loop always_reset")
 
 class Icon():
+    # private
+    _state_name: str = None
+    
+    _state: IconState = None
+    
+    _animation_start_frame: int = 0
+    
+    _state_just_changed: bool = False
+
+    _converted: bool = False
+
+    # public
     sprite_map: pg.Surface = None
-    metadata: dict = {}
+
+    metadata: dict = None
+    
     size: Vec2 = None
-    states: dict = {}
+    
+    states: dict = None
 
-    has_alpha = True
+    has_alpha: bool = True
 
-    _state_name = None
-    _state = None
-    _animation_start_frame = 0
-    _state_just_changed = False
+    resource: str = None
 
-    _converted = False
-
-    def __init__(self, resource, icon_state=None):
+    def __init__(self, resource: str, icon_state: IconState = None):
         self.resource = resource
 
         self.sprite_map, self.metadata, self._converted = load_icon(self.resource)
@@ -49,13 +59,13 @@ class Icon():
         
         self.set_state(icon_state)
 
-    def get_subsurface_at(self, row, column):
+    def get_subsurface_at(self, row: int, column: int) -> pg.Surface:
         return self.sprite_map.subsurface((self.size.x*column, self.size.y*row, self.size.x, self.size.y))
 
-    def get_state(self):
+    def get_state(self) -> IconState:
         return self._state
 
-    def set_state(self, icon_state: str, restart=True):
+    def set_state(self, icon_state: str, restart: bool = True) -> None:
         if icon_state not in self.states and icon_state != None:
             raise ValueError(f"nonexistent icon state {icon_state}")
     
@@ -66,7 +76,7 @@ class Icon():
             if restart:
                 self._state_just_changed = True
 
-    def get_surface(self, frame):
+    def get_surface(self, frame: int) -> pg.Surface:
         if not self._converted:
             new_surface = try_convert_surface(self.sprite_map, self.metadata)
             

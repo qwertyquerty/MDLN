@@ -6,7 +6,13 @@ from mdln.geometry import Vec2
 from mdln.scene import Scene
 from mdln.util import load_all_entities_from_path
 
+from typing import Self
+
 class Game():
+    # public
+    
+    scene: Scene = None
+
     initialized: bool = False
 
     clock: pg.time.Clock = None
@@ -29,12 +35,10 @@ class Game():
 
     background_color: tuple = COLOR_BACKGROUND_DEFAULT
 
-    _scene: Scene = None
-
-    tick = 0
+    tick: int = 0
 
     def __init__(self,
-        screen_size = SCREEN_SIZE_DEFAULT,
+        screen_size: Vec2 = SCREEN_SIZE_DEFAULT,
         fps: int = FPS_DEFAULT,
         pixel_scaling: int = PIXEL_SCALE_DEFAULT,
         title: str = TITLE_DEFAULT,
@@ -76,9 +80,49 @@ class Game():
         if entity_path != None:
             load_all_entities_from_path(entity_path)
 
-    def set_title(self, title: str):
-        self._title = title
-        pg.display.set_caption(self._title)
+    def _event(self, event):
+        if event.type in event_handlers:
+            for handler in event_handlers[event.type]:
+                handler(event)
+    
+    def _init(self):
+        if not self.initialized:
+            self.initialized = True
+
+            self.init()
+
+            if self.scene:
+                self.scene._init()
+
+    def _tick(self):
+        self.tick()
+
+        if self.scene is not None:
+            self.scene._tick()
+
+    def _draw(self):
+        self.draw(self.screen)
+
+        self.screen.fill(self.background_color)
+
+        if self.scene is not None:
+            self.scene._draw(self.screen)
+
+        if self.pixel_scaling != 1:
+            pg.transform.scale_by(self.screen, self.pixel_scaling, self.window)
+        else:
+            self.window.blit(self.screen, (0,0))
+
+        pg.display.flip()
+
+    def init(self) -> None:
+        pass
+
+    def tick(self) -> None:
+        pass
+
+    def draw(self, screen: pg.Surface) -> None:
+        pass
 
     def start(self):
         self._init()
@@ -98,62 +142,22 @@ class Game():
 
             self.ticks += 1
 
-    def _event(self, event):
-        if event.type in event_handlers:
-            for handler in event_handlers[event.type]:
-                handler(event)
+    def set_title(self, title: str) -> Self:
+        self._title = title
+        pg.display.set_caption(self._title)
+        return self
 
-    def _tick(self):
-        self.tick()
-
-        if self._scene is not None:
-            self._scene._tick()
-
-    def _draw(self):
-        self.draw(self.screen)
-
-        self.screen.fill(self.background_color)
-
-        if self._scene is not None:
-            self._scene._draw(self.screen)
-
-        if self.pixel_scaling != 1:
-            pg.transform.scale_by(self.screen, self.pixel_scaling, self.window)
-        else:
-            self.window.blit(self.screen, (0,0))
-
-        pg.display.flip()
-    
-    def _init(self):
-        if not self.initialized:
-            self.initialized = True
-
-            self.init()
-
-            if self._scene:
-                self._scene._init()
-
-    def set_scene(self, scene: Scene):
-        self._scene = scene
-        self._scene.game = self
+    def set_scene(self, scene: Scene) -> Self:
+        self.scene = scene
+        self.scene.game = self
 
         if self.running and not scene.initialized:
             scene._init()
-    
-    def get_scene(self):
-        return self._scene
+        
+        return self
 
-    def get_fps(self):
+    def get_fps(self) -> int:
         return self.clock.get_fps()
 
-    def tick(self):
-        pass
-
-    def draw(self, screen):
-        pass
-
-    def init(self):
-        pass
-
-    def get_pixel_mouse_pos(self):
+    def get_pixel_mouse_pos(self) -> Vec2:
         return (Vec2(*pg.mouse.get_pos()) / self.pixel_scaling).floored()

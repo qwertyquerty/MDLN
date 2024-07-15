@@ -6,6 +6,12 @@ from .rect import Rect
 from .vector import Vec2
 
 class Circle():
+    # public
+    
+    center: Vec2 = None
+
+    radius: Number = None
+
     def __init__(self, center: Vec2, radius: Number):
         self.center = center
         self.radius = radius
@@ -16,19 +22,19 @@ class Circle():
     def circumference(self) -> Number:
         return math.pi * self.radius * 2
     
-    def contains_vector(self, point: Vec2, inclusive=True) -> bool:
+    def contains_vector(self, point: Vec2, inclusive: bool = False) -> bool:
         if inclusive:
             return self.radius**2 >= (self.center - point).sq_mag()
         else:
             return self.radius**2 > (self.center - point).sq_mag()
         
-    def intersects_circle(self, other: Self, inclusive=True) -> bool:
+    def intersects_circle(self, other: Self, inclusive: bool = False) -> bool:
         if inclusive:
             return (self.radius + other.radius)**2 >= (self.center - other.center).sq_mag()
         else:
             return (self.radius + other.radius)**2 > (self.center - other.center).sq_mag()
 
-    def contains_circle(self, other: Self, inclusive=True) -> bool:
+    def contains_circle(self, other: Self, inclusive: bool = False) -> bool:
         if inclusive:
             return (self.radius-other.radius)**2 >= (self.center - other.center).sq_mag()
         else:
@@ -40,7 +46,7 @@ class Circle():
             Vec2(self.radius * 2, self.radius * 2)
         )
 
-    def point_at_angle(self, angle: Number):
+    def point_at_angle(self, angle: Number) -> Self:
         return Vec2(self.center.x + math.cos(angle) * self.radius, self.center.y + math.sin(angle) * self.radius)
     
     def copy(self) -> Self:

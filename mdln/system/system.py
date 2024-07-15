@@ -1,7 +1,17 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mdln.stage import Stage
+    import pygame as pg
+
+
 class System():
+    # public
+
     initialized: bool = False
-    
-    stage = None
+
+    stage: Stage = None
 
     wait: int = 1
 
@@ -11,14 +21,14 @@ class System():
 
     ticks: int = 0
 
-    def __init__(self, stage=None):
-        self.stage = stage
-
-    def init(self):
+    def init(self) -> None:
         pass
 
-    def tick(self):
+    def tick(self) -> None:
         pass
 
-    def attach(self, stage):
+    def draw(self, screen: pg.Surface) -> None:
+        pass
+
+    def _attach(self, stage: Stage) -> None:
         self.stage = stage

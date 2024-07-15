@@ -1,11 +1,10 @@
 import os
 from pathlib import Path
 
-def resource_to_path(resource):
+def resource_to_path(resource: str) -> str:
     return os.path.join(*resource.split("."))
 
-
-def load_all_entities_from_path(path):
+def load_all_entities_from_path(path: str) -> None:
     for root, dirs, files in os.walk(os.path.join(*Path(path).parts)):
         for file_path in files:
             if file_path.endswith('.py'):

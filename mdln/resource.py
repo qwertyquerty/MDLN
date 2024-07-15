@@ -5,10 +5,12 @@ import yaml
 from mdln.const import *
 from mdln.util import resource_to_path
 
+from typing import List, Union
+
 RESOURCE_CACHE_SOUND = {}
 RESOURCE_CACHE_ICON = {}
 
-def load_icon(resource, use_cache=True):
+def load_icon(resource: str, use_cache: bool = True) -> List:
     if resource in RESOURCE_CACHE_ICON and use_cache:
         # TODO: named tuple maybe
         if not RESOURCE_CACHE_ICON[resource][2]:
@@ -38,7 +40,7 @@ def load_icon(resource, use_cache=True):
 
     return [surface, metadata, converted]
 
-def try_convert_surface(surface, metadata):
+def try_convert_surface(surface: pg.Surface, metadata: dict) -> Union[pg.Surface, bool]:
     try:
         if metadata.get("has_alpha", True):
             return surface.convert_alpha()
@@ -48,7 +50,7 @@ def try_convert_surface(surface, metadata):
     except pg.error:
         return False
 
-def load_sound(resource, use_cache=True):
+def load_sound(resource: str, use_cache=True) -> pg.mixer.Sound:
     if resource in RESOURCE_CACHE_SOUND and use_cache:
         return RESOURCE_CACHE_SOUND[resource]
 
