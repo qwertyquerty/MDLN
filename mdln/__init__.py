@@ -1,3 +1,6 @@
+import os
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "True"
+
 from .__about__ import *
 from .component import *
 from .const import *

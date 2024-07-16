@@ -76,7 +76,7 @@ class Entity():
 
     def draw(self, ctx: Context) -> pg.Surface:
         ctx.entity = self
-        
+
         for component in self._component_registry.values():
             component.draw(ctx)
 

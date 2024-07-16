@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING, Self
 if TYPE_CHECKING:
     from mdln.game import Game
     from mdln.stage import Stage
-    from mdln.util import Context
 
 from mdln.const import *
+from mdln.util import Context
 
 
 class Scene():

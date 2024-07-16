@@ -36,13 +36,12 @@ class Stage():
 
         self._deletion_queue = []
 
-    def _init(self, ctx: Context) -> None:
-        ctx.stage = self
-        self.tick(ctx)
-        
+    def _init(self, ctx: Context) -> None:        
         if not self.initialized:
             self.initialized = True
             
+            ctx.stage = self
+
             self.init(ctx)
 
             for entity in self.entities:
@@ -115,6 +114,7 @@ class Stage():
 
         if self.scene and self.scene.game and self.scene.game.running and not entity.initialized:
             entity.init(Context.from_stage(self))
+            entity.initialized = True
 
     def add_system(self, system: System) -> None:
         bisect.insort(self.systems, system, key=lambda s: s.priority)
@@ -122,7 +122,8 @@ class Stage():
 
         if self.scene and self.scene.game and self.scene.game.running and not system.initialized:
             system.init(Context.from_stage(self))
-
+            system.initialized = True
+            
     def get_entities_with_component(self, component_type: type) -> Iterator[Entity]:
         return (entity for entity in self.entities if entity.has_component(component_type))
 
