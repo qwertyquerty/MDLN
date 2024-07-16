@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 from mdln.const import *
 from mdln.entity import Entity
 from mdln.system import System
+from mdln.util import Context
 
 import bisect
 
@@ -35,35 +36,38 @@ class Stage():
 
         self._deletion_queue = []
 
-    def _init(self) -> None:
+    def _init(self, ctx: Context) -> None:
+        ctx.stage = self
+        self.tick(ctx)
+        
         if not self.initialized:
             self.initialized = True
             
-            self.init()
+            self.init(ctx)
 
             for entity in self.entities:
                 if not entity.initialized:
-                    entity.init()
+                    entity._init(ctx)
                     entity.initialized = True
             
             for system in self.systems:
                 if not system.initialized:
-                    system.init()
+                    system._init(ctx)
                     system.initialized = True
 
-    def _tick(self) -> None:
-        self.tick()
+    def _tick(self, ctx: Context) -> None:
+        ctx.stage = self
+        self.tick(ctx)
         
         for entity in self.entities:
             if entity.active:
-                entity._tick()
+                entity._tick(ctx)
         
         self.systems.sort(key=lambda s: s.priority)
 
         for system in self.systems:
             if system.active and (self.ticks % system.wait) == 0:
-                system.tick()
-                system.ticks += 1
+                system._tick(ctx)
     
         for entity in self._deletion_queue:
             self.entities.remove(entity)
@@ -72,46 +76,52 @@ class Stage():
 
         self.ticks += 1
                 
-    def _draw(self, screen: pg.Surface) -> None:
-        self.draw(screen)
-        self.draw_entities(screen)
-        self.post_draw(screen)
+    def _draw(self, ctx: Context) -> None:
+        ctx.stage = self
+        self.draw(ctx)
+        self.draw_entities(ctx)
 
-    def init(self) -> None:
+        for system in self.systems:
+            if system.active:
+                system.draw(ctx)
+
+        self.post_draw(ctx)
+
+    def init(self, ctx: Context) -> None:
         pass
 
-    def tick(self) -> None:
+    def tick(self, ctx: Context) -> None:
         pass
 
-    def draw(self, screen: pg.Surface) -> None:
-        pass
-    
-    def post_draw(self, screen: pg.Surface) -> None:
+    def draw(self, ctx: Context) -> None:
         pass
 
-    def draw_entities(self, screen: pg.Surface) -> None:
+    def draw_entities(self, ctx: Context) -> None:
         self.entities.sort(key=lambda e: e.layer)
 
         for entity in self.entities:
             if entity.visible:
-                surf = entity.draw(screen)
+                surf = entity.draw(ctx)
 
                 if surf is not None:
-                    screen.blit(surf, entity.rect.topleft())
+                    ctx.surface.blit(surf, entity.rect.topleft())
+
+    def post_draw(self, ctx: Context) -> None:
+        pass
 
     def add_entity(self, entity: Entity) -> None:
         self.entities.append(entity)
         entity.stage = self
 
         if self.scene and self.scene.game and self.scene.game.running and not entity.initialized:
-            entity.init()
+            entity.init(Context.from_stage(self))
 
     def add_system(self, system: System) -> None:
         bisect.insort(self.systems, system, key=lambda s: s.priority)
         system._attach(self)
 
         if self.scene and self.scene.game and self.scene.game.running and not system.initialized:
-            system.init()
+            system.init(Context.from_stage(self))
 
     def get_entities_with_component(self, component_type: type) -> Iterator[Entity]:
         return (entity for entity in self.entities if entity.has_component(component_type))

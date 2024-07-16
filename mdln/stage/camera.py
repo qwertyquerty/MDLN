@@ -9,17 +9,17 @@ class CameraStage(Stage):
     
     camera_target: Entity = None
 
-    def tick(self):
+    def tick(self, ctx):
         if self.camera_target is not None:
             self.camera_pos.set(self.camera_target.rect.center())
     
-    def draw_entities(self, screen):
-        screen_rect = Rect.from_pg(screen.get_rect())
+    def draw_entities(self, ctx):
+        screen_rect = Rect.from_pg(ctx.surface.get_rect())
 
         self.entities.sort(key=lambda e: e.layer)
 
         for entity in self.entities:
-            surf = entity.draw(screen)
+            surf = entity.draw(ctx)
 
             if surf is not None:
                 surf_rect = Rect(
@@ -28,4 +28,4 @@ class CameraStage(Stage):
                 )
 
                 if screen_rect.intersects_rect(surf_rect):
-                    screen.blit(surf, surf_rect.to_tuple())
+                    ctx.surface.blit(surf, surf_rect.to_tuple())

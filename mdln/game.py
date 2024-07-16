@@ -4,7 +4,7 @@ from mdln.const import *
 from mdln.glob import event_handlers
 from mdln.geometry import Vec2
 from mdln.scene import Scene
-from mdln.util import load_all_entities_from_path
+from mdln.util import load_all_entities_from_path, Context
 
 from typing import Self
 
@@ -89,24 +89,36 @@ class Game():
         if not self.initialized:
             self.initialized = True
 
-            self.init()
+            ctx = Context()
+            ctx.game = self
+
+            self.init(ctx)
 
             if self.scene:
-                self.scene._init()
+                self.scene._init(ctx)
 
     def _tick(self):
-        self.tick()
+        ctx = Context()
+        ctx.game = self
+
+        self.tick(ctx)
 
         if self.scene is not None:
-            self.scene._tick()
+            self.scene._tick(ctx)
 
     def _draw(self):
-        self.draw(self.screen)
+        ctx = Context()
+        ctx.game = self
+        ctx.surface = self.screen
+
+        self.draw(ctx)
 
         self.screen.fill(self.background_color)
 
         if self.scene is not None:
-            self.scene._draw(self.screen)
+            self.scene._draw(ctx)
+
+        self.post_draw(ctx)
 
         if self.pixel_scaling != 1:
             pg.transform.scale_by(self.screen, self.pixel_scaling, self.window)
@@ -115,13 +127,16 @@ class Game():
 
         pg.display.flip()
 
-    def init(self) -> None:
+    def init(self, ctx: Context) -> None:
         pass
 
-    def tick(self) -> None:
+    def tick(self, ctx: Context) -> None:
         pass
 
-    def draw(self, screen: pg.Surface) -> None:
+    def draw(self, ctx: Context) -> None:
+        pass
+
+    def post_draw(self, ctx: Context) -> None:
         pass
 
     def start(self):
@@ -152,7 +167,7 @@ class Game():
         self.scene.game = self
 
         if self.running and not scene.initialized:
-            scene._init()
+            scene._init(Context.from_game(self))
         
         return self
 

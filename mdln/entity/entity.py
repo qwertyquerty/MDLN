@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Self, Tuple
+from typing import TYPE_CHECKING, Self, Tuple, Dict
 
 if TYPE_CHECKING:
     from mdln.stage import Stage
@@ -9,6 +9,7 @@ from mdln.const import *
 from mdln.geometry import Rect, Vec2
 from mdln.icon import Icon
 from mdln.registry import ENTITY_REGISTRY
+from mdln.util import Context
 
 import inspect
 import pygame as pg
@@ -17,7 +18,7 @@ import pygame as pg
 class Entity():
     # private
 
-    _component_registry: dict = None
+    _component_registry: Dict[type, Component] = None
 
     # public
 
@@ -56,24 +57,31 @@ class Entity():
         path = '.'.join([o.__name__ for o in tree[::-1]])        
         ENTITY_REGISTRY[path.lower()] = cls
 
-    def _tick(self) -> None:
+    def _init(self, ctx: Context) -> None:
+        ctx.entity = self
+        self.init(ctx)
+
+    def _tick(self, ctx: Context) -> None:
+        ctx.entity = self
+        self.tick(ctx)
+
         for component in self._component_registry.values():
-            component.tick()
+            component.tick(ctx)
+
+    def init(self, ctx: Context) -> None:
+        pass
+
+    def tick(self, ctx: Context) -> None:
+        pass
+
+    def draw(self, ctx: Context) -> pg.Surface:
+        ctx.entity = self
         
-        self.tick()
-
-    def init(self) -> None:
-        pass
-
-    def tick(self) -> None:
-        pass
-
-    def draw(self, screen: pg.Surface) -> pg.Surface:
-        if self.icon is not None:
-            return self.icon.get_surface(self.stage.scene.game.tick)
-
         for component in self._component_registry.values():
-            component.draw(screen)
+            component.draw(ctx)
+
+        if self.icon is not None:
+            return self.icon.get_surface(ctx.game.tick)
 
         return None
 
@@ -85,7 +93,7 @@ class Entity():
 
         self._component_registry[type(component)] = component
         component._attach(self)
-        component.init()
+        component.init(Context.from_entity(self))
 
         return self
 
